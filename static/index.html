@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Simple-Chat-UI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="./style.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+
+<div class="main_section">
+  <div class="container">
+    <div class="chat_container">
+      <div class="col-sm-3 hidden-xs chat_sidebar"></div>
+      <div class="col-sm-6 message_section">
+        <div class="row" style="background-image: url(woow.jpeg)">
+          <!--new_message_head-->
+
+          <div id="v-app">
+            <p>
+            <ul >
+              <li v-for="msg of messages">{{ msg }}</li>
+            </ul>
+            <p>
+
+
+          <!--chat_area-->
+
+          <div class="message_write">
+            <input class="form-control" v-model="text" type="text" />
+            <button type="submit" @click.prevent="sendMessage()">Send</button>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <!--message_section-->
+
+      <div class="col-sm-3 hidden-xs chat_sidebar">
+        <div class="row" style="text-align: center">
+    </div>
+  </div>
+
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.autosize/3.0.20/autosize.min.js"></script>
+
+  <script>
+    var app = new Vue({
+      el: '#v-app',
+      data: {
+        title: 'Websockets Tester',
+        text: '',
+        messages: ['Some message', 'Another message'],
+        socket: null,
+      },
+      methods: {
+        sendMessage() {
+          console.log(`send: ${this.text}`);
+          this.socket.emit('msgToServer', this.text);
+          this.text = "";
+        },
+        receiveMessage(msg) {
+          console.log(`recv: ${msg}`);
+          this.messages.push(msg);
+        }
+      },
+      created() {
+        this.socket = io('http://localhost:3000');
+        this.socket.on('msgToClient', (msg) => {
+          this.receiveMessage(msg);
+        });
+      }
+    });
+
+  </script>
+
+</body>
+
+</html>
