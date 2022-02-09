@@ -20,10 +20,13 @@
       <div class="col-sm-3 hidden-xs chat_sidebar"></div>
       <div class="col-sm-6 message_section">
         <div class="row" style="background-image: url(woow.jpeg)">
+
           <!--new_message_head-->
 
           <div id="v-app">
             <p>
+            <span  style="display:block; padding:5px 0 5px 0;"></span>
+              <span style="font-size:0.85em; color:grey; display:block; float:right;"></span>
             <ul >
               <li v-for="msg of messages">{{ msg }}</li>
             </ul>
@@ -54,18 +57,18 @@
 <script src="https://cdn.jsdelivr.net/jquery.autosize/3.0.20/autosize.min.js"></script>
 
   <script>
-    var app = new Vue({
-      el: '#v-app',
+    const app = new Vue({
+      el: "#v-app",
       data: {
-        title: 'Websockets Tester',
-        text: '',
-        messages: ['Some message', 'Another message'],
-        socket: null,
+        title: "",
+        text: "",
+        messages: [],
+        socket: null
       },
       methods: {
         sendMessage() {
           console.log(`send: ${this.text}`);
-          this.socket.emit('msgToServer', this.text);
+          this.socket.emit("msgToServer", this.text);
           this.text = "";
         },
         receiveMessage(msg) {
@@ -74,8 +77,8 @@
         }
       },
       created() {
-        this.socket = io('http://localhost:3000');
-        this.socket.on('msgToClient', (msg) => {
+        this.socket = io("http://localhost:3000");
+        this.socket.on("msgToClient", (msg) => {
           this.receiveMessage(msg);
         });
       }
